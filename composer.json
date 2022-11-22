@@ -1,0 +1,38 @@
+{
+    "name": "kieranfyi/roles",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "KieranFYI\\Roles\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kieran",
+            "email": "kieran@andersons.bz"
+        }
+    ],
+    "repositories": [
+        {
+            "url": "git@github.com:Kieran-FYI/logging.git",
+            "type": "vcs"
+        },
+
+        {
+            "url": "git@github.com:Kieran-FYI/misc.git",
+            "type": "vcs"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KieranFYI\\Roles\\Providers\\RolesPackageServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "laravel/framework": "^9.19",
+        "kieranfyi/logging": "^0.2"
+    }
+}
