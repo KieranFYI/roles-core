@@ -10,6 +10,9 @@ abstract class AbstractPolicy
 {
     use HandlesAuthorization;
 
+    /**
+     * @var string
+     */
     private string $policyName;
 
     public function __construct()

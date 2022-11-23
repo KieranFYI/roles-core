@@ -1,15 +1,18 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands;
+namespace KieranFYI\Roles\Console\Commands\Roles;
 
 use Exception;
 use Illuminate\Console\Command;
+use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use KieranFYI\Roles\Models\Roles\Role;
 
 class RolesSync extends Command
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -56,6 +59,10 @@ class RolesSync extends Command
      */
     public function handle(): int
     {
+        if (!$this->confirmToProceed()) {
+            return self::FAILURE;
+        }
+
         $this->existingRoles = Role::get();
         $this->rolesToSync = config('roles.roles');
         $this->defaults = config('roles.defaults');

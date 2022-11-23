@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Traits;
+namespace KieranFYI\Roles\Traits\Permissions;
 
 use KieranFYI\Roles\Models\Permissions\Permission;
 

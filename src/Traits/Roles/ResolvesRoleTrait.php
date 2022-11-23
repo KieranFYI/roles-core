@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Traits;
+namespace KieranFYI\Roles\Traits\Roles;
 
 use KieranFYI\Roles\Models\Roles\Role;
 

@@ -4,7 +4,7 @@ namespace KieranFYI\Roles\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use KieranFYI\Roles\Traits\HasPermissionsTrait;
+use KieranFYI\Roles\Traits\Permissions\HasPermissionsTrait;
 
 /**
  * @property integer $id

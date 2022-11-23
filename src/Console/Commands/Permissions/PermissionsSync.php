@@ -1,8 +1,9 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands;
+namespace KieranFYI\Roles\Console\Commands\Permissions;
 
 use Illuminate\Console\Command;
+use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -11,6 +12,8 @@ use SplFileInfo;
 
 class PermissionsSync extends Command
 {
+    use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -47,6 +50,10 @@ class PermissionsSync extends Command
      */
     public function handle(): int
     {
+        if (!$this->confirmToProceed()) {
+            return self::FAILURE;
+        }
+
         $this->existingPermissions = Permission::get();
         $this->defaults = config('permissions.defaults');
         $this->permissionsToSync = config('permissions.permissions');

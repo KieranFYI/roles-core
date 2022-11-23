@@ -3,8 +3,8 @@
 namespace KieranFYI\Roles\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use KieranFYI\Roles\Console\Commands\PermissionsSync;
-use KieranFYI\Roles\Console\Commands\RolesSync;
+use KieranFYI\Roles\Console\Commands\Permissions\PermissionsSync;
+use KieranFYI\Roles\Console\Commands\Roles\RolesSync;
 
 class RolesPackageServiceProvider extends ServiceProvider
 {
