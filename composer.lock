@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d6c15b43edd8c2c7c09021a7b3ef0c0",
+    "content-hash": "327e1d3276cb90a4f6f5dfaccf08d914",
     "packages": [
         {
             "name": "brick/math",
@@ -899,23 +899,24 @@
         },
         {
             "name": "kieranfyi/logging",
-            "version": "v0.2",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:Kieran-FYI/logging.git",
-                "reference": "bd93f8b32475c5849d34b3022b6ea23bd42f729e"
+                "reference": "f7162a5c24b3374f8bb8f0b03671da51a1a24dd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/bd93f8b32475c5849d34b3022b6ea23bd42f729e",
-                "reference": "bd93f8b32475c5849d34b3022b6ea23bd42f729e",
+                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/f7162a5c24b3374f8bb8f0b03671da51a1a24dd4",
+                "reference": "f7162a5c24b3374f8bb8f0b03671da51a1a24dd4",
                 "shasum": ""
             },
             "require": {
-                "kieranfyi/misc": "^0.1",
+                "kieranfyi/misc": "dev-main",
                 "laravel/framework": "^9.19",
                 "php": "^8.1"
             },
+            "default-branch": true,
             "type": "project",
             "extra": {
                 "laravel": {
@@ -936,14 +937,14 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/Kieran-FYI/logging/tree/v0.2",
+                "source": "https://github.com/Kieran-FYI/logging/tree/main",
                 "issues": "https://github.com/Kieran-FYI/logging/issues"
             },
-            "time": "2022-11-20T06:33:54+00:00"
+            "time": "2022-11-23T01:51:23+00:00"
         },
         {
             "name": "kieranfyi/misc",
-            "version": "v0.1",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "git@github.com:Kieran-FYI/misc.git",
@@ -961,6 +962,7 @@
                 "laravel/framework": "^9.19",
                 "php": "^8.1"
             },
+            "default-branch": true,
             "type": "project",
             "autoload": {
                 "psr-4": {
@@ -981,16 +983,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v9.40.1",
+            "version": "v9.41.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "9611fdaf2db5759b8299802d7185bcdbee0340bb"
+                "reference": "cc902ce61b4ca08ca7449664cfab2fa96a1d1e28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/9611fdaf2db5759b8299802d7185bcdbee0340bb",
-                "reference": "9611fdaf2db5759b8299802d7185bcdbee0340bb",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/cc902ce61b4ca08ca7449664cfab2fa96a1d1e28",
+                "reference": "cc902ce61b4ca08ca7449664cfab2fa96a1d1e28",
                 "shasum": ""
             },
             "require": {
@@ -1163,7 +1165,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-11-15T16:13:22+00:00"
+            "time": "2022-11-22T15:10:46+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -5183,9 +5185,11 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "kieranfyi/logging": 20
+    },
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"

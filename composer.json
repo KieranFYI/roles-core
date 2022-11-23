@@ -1,6 +1,8 @@
 {
     "name": "kieranfyi/roles",
     "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "KieranFYI\\Roles\\": "src/"
@@ -33,6 +35,6 @@
     "require": {
         "php": "^8.1",
         "laravel/framework": "^9.19",
-        "kieranfyi/logging": "^0.2"
+        "kieranfyi/logging": "dev-main"
     }
 }
