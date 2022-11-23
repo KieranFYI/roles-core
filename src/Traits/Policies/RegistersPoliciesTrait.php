@@ -4,15 +4,11 @@ namespace KieranFYI\Roles\Traits\Policies;
 
 use Illuminate\Support\Facades\Gate;
 
+/**
+ * @property array<class-string, class-string> $policies
+ */
 trait RegistersPoliciesTrait
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array<class-string, class-string>
-     */
-    protected array $policies = [];
-
     /**
      * Register the application's policies.
      *
@@ -30,8 +26,11 @@ trait RegistersPoliciesTrait
      *
      * @return array<class-string, class-string>
      */
-    public function policies()
+    public function policies(): array
     {
-        return $this->policies;
+        if (property_exists($this, 'policies')) {
+            return $this->policies;
+        }
+        return [];
     }
 }
