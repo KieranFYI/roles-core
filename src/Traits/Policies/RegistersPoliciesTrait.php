@@ -3,6 +3,7 @@
 namespace KieranFYI\Roles\Traits\Policies;
 
 use Illuminate\Support\Facades\Gate;
+use TypeError;
 
 /**
  * @property array<class-string, class-string> $policies
@@ -29,6 +30,10 @@ trait RegistersPoliciesTrait
     public function policies(): array
     {
         if (property_exists($this, 'policies')) {
+            if (!is_array($this->policies)) {
+                throw new TypeError('Invalid Type on "policies", array expected');
+            }
+
             return $this->policies;
         }
         return [];

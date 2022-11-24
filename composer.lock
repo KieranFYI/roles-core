@@ -903,12 +903,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Kieran-FYI/logging.git",
-                "reference": "f7162a5c24b3374f8bb8f0b03671da51a1a24dd4"
+                "reference": "c30e1d1dc70c32572944e205a700509a90c9e40f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/f7162a5c24b3374f8bb8f0b03671da51a1a24dd4",
-                "reference": "f7162a5c24b3374f8bb8f0b03671da51a1a24dd4",
+                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/c30e1d1dc70c32572944e205a700509a90c9e40f",
+                "reference": "c30e1d1dc70c32572944e205a700509a90c9e40f",
                 "shasum": ""
             },
             "require": {
@@ -940,7 +940,7 @@
                 "source": "https://github.com/Kieran-FYI/logging/tree/main",
                 "issues": "https://github.com/Kieran-FYI/logging/issues"
             },
-            "time": "2022-11-23T01:51:23+00:00"
+            "time": "2022-11-24T03:03:40+00:00"
         },
         {
             "name": "kieranfyi/misc",
