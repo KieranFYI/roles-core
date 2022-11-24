@@ -903,12 +903,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Kieran-FYI/logging.git",
-                "reference": "8eb361388b533aff6b31112f25c9d495ed6003fd"
+                "reference": "1b36a8b7b6882c9f288be304a5d69d06450df428"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/8eb361388b533aff6b31112f25c9d495ed6003fd",
-                "reference": "8eb361388b533aff6b31112f25c9d495ed6003fd",
+                "url": "https://api.github.com/repos/Kieran-FYI/logging/zipball/1b36a8b7b6882c9f288be304a5d69d06450df428",
+                "reference": "1b36a8b7b6882c9f288be304a5d69d06450df428",
                 "shasum": ""
             },
             "require": {
@@ -940,7 +940,7 @@
                 "source": "https://github.com/Kieran-FYI/logging/tree/main",
                 "issues": "https://github.com/Kieran-FYI/logging/issues"
             },
-            "time": "2022-11-24T03:33:50+00:00"
+            "time": "2022-11-24T04:45:10+00:00"
         },
         {
             "name": "kieranfyi/misc",
@@ -948,12 +948,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:Kieran-FYI/misc.git",
-                "reference": "bd2dd2f128d4fa9c4b7bb660000757e6037b5f82"
+                "reference": "48c12d856eabacc5f8321542152c39d0e2218337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kieran-FYI/misc/zipball/bd2dd2f128d4fa9c4b7bb660000757e6037b5f82",
-                "reference": "bd2dd2f128d4fa9c4b7bb660000757e6037b5f82",
+                "url": "https://api.github.com/repos/Kieran-FYI/misc/zipball/48c12d856eabacc5f8321542152c39d0e2218337",
+                "reference": "48c12d856eabacc5f8321542152c39d0e2218337",
                 "shasum": ""
             },
             "require": {
@@ -976,10 +976,10 @@
                 }
             ],
             "support": {
-                "source": "https://github.com/Kieran-FYI/misc/tree/v0.1",
+                "source": "https://github.com/Kieran-FYI/misc/tree/main",
                 "issues": "https://github.com/Kieran-FYI/misc/issues"
             },
-            "time": "2022-11-20T05:33:17+00:00"
+            "time": "2022-11-24T04:18:28+00:00"
         },
         {
             "name": "laravel/framework",
