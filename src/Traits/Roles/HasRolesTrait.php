@@ -5,6 +5,7 @@ namespace KieranFYI\Roles\Traits\Roles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
+use KieranFYI\Logging\Traits\LoggingTrait;
 use KieranFYI\Roles\Models\Permissions\Permission;
 use KieranFYI\Roles\Models\Roles\Role;
 use KieranFYI\Roles\Traits\Permissions\ResolvesPermissionTrait;
@@ -18,6 +19,7 @@ class HasRolesTrait
 {
     use ResolvesRoleTrait;
     use ResolvesPermissionTrait;
+    use LoggingTrait;
 
     /**
      * @var Role
@@ -88,6 +90,36 @@ class HasRolesTrait
     {
         $role = $this->resolveRole($role);
         return $this->roles->contains('id', $role->id);
+    }
+
+    /**
+     * @param Role|string $role
+     */
+    public function addRole(Role|string $role): void
+    {
+        $role = $this->resolveRole($role);
+
+        if ($this->hasRole($role)) {
+            $this->security('Attempted to add role: ' . $role->name, $role);
+        } else {
+            $this->roles()->attach($role);
+            $this->security('Added role: ' . $role->name, $role);
+        }
+    }
+
+    /**
+     * @param Role|string $role
+     */
+    public function removeRole(Role|string $role): void
+    {
+        $role = $this->resolveRole($role);
+
+        if ($this->hasPermission($role)) {
+            $this->roles()->detach($role);
+            $this->security('Removed role: ' . $role->name, $role);
+        } else {
+            $this->security('Attempted to remove role: ' . $role->name, $role);
+        }
     }
 
     /**
