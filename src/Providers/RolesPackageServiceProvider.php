@@ -33,7 +33,7 @@ class RolesPackageServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $root = __DIR__ . '/..';
+        $root = __DIR__ . '/../..';
 
         $this->publishes([
             $root . '/config/roles.php' => config_path('roles.php'),
