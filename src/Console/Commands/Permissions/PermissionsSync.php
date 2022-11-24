@@ -7,8 +7,11 @@ use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use KieranFYI\Roles\Events\RegisterPermissionEvent;
 use KieranFYI\Roles\Models\Permissions\Permission;
+use KieranFYI\Roles\Services\RegisterPermission;
 use SplFileInfo;
+use TypeError;
 
 class PermissionsSync extends Command
 {
@@ -57,6 +60,17 @@ class PermissionsSync extends Command
         $this->existingPermissions = Permission::get();
         $this->defaults = config('permissions.defaults');
         $this->permissionsToSync = config('permissions.permissions');
+
+
+        // RegisterPermission
+        $results = event(RegisterPermissionEvent::class, [], false);
+        foreach ($results as $permission) {
+            if (!($permission instanceof RegisterPermission)) {
+                throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class);
+            }
+
+            $this->permissionsToSync[] = $permission->toArray();
+        }
 
         $this->seedPermissions();
         $this->seedPolicyPermissions();

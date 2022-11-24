@@ -31,7 +31,7 @@ trait RegistersPoliciesTrait
     {
         if (property_exists($this, 'policies')) {
             if (!is_array($this->policies)) {
-                throw new TypeError('Invalid Type on "policies", array expected');
+                throw new TypeError(self::class.'::policies(): Property ($policies) must be of type array');
             }
 
             return $this->policies;
