@@ -114,7 +114,7 @@ class HasRolesTrait
     {
         $role = $this->resolveRole($role);
 
-        if ($this->hasPermission($role)) {
+        if ($this->hasRole($role)) {
             $this->roles()->detach($role);
             $this->security('Removed role: ' . $role->name, $role);
         } else {
