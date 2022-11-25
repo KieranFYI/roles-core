@@ -4,12 +4,11 @@ namespace KieranFYI\Roles\Console\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
 use KieranFYI\Roles\Models\Permissions\Permission;
+use KieranFYI\Roles\Policies\AbstractPolicy;
 use KieranFYI\Roles\Services\Register\RegisterPermission;
 use SplFileInfo;
 use TypeError;
@@ -43,9 +42,9 @@ class SyncPermissions extends Command
     private array $defaults;
 
     /**
-     * @var array
+     * @var string[]
      */
-    private array $permissionsToSync;
+    private array $permissionsToSync = [];
 
     /**
      * Execute the console command.
@@ -60,107 +59,95 @@ class SyncPermissions extends Command
 
         $this->existingPermissions = Permission::get();
         $this->defaults = config('permissions.defaults');
-        $this->permissionsToSync = config('permissions.permissions');
 
         /*
          * Send the global event to register other package permissions
          */
         $results = event(RegisterPermissionEvent::class, [], false);
-        $this->processPermissions($results);
+        $this->registerPermissions($results);
 
+        $this->seedPolicies();
         $this->seedPermissions();
-        $this->seedPolicyPermissions();
+
         return self::SUCCESS;
     }
 
     private function seedPermissions(): void
     {
-        foreach ($this->permissionsToSync as $permissionSettings) {
-            $permissionSettings = array_merge($this->defaults, $permissionSettings);
-            $perm = $this->existingPermissions
-                    ->firstWhere('name', $permissionSettings['name'])
-                ?? new Permission([
-                    'name' => $permissionSettings['name']
-                ]);
+        collect($this->permissionsToSync)
+            ->filter()
+            ->unique()
+            ->each(function (array $permissionSettings) {
+                $permissionSettings = array_merge($this->defaults, $permissionSettings);
+                $permission = $this->existingPermissions
+                        ->firstWhere('name', $permissionSettings['name'])
+                    ?? new Permission([
+                        'name' => $permissionSettings['name']
+                    ]);
 
-            $this->info(($perm->exists ? 'Updating' : 'Adding') . ' permission ' . $permissionSettings['name']);
+                $this->info(($permission->exists ? 'Updating' : 'Adding') . ' permission ' . $permissionSettings['name']);
 
-            $perm
-                ->fill([
-                    'description' => data_get($permissionSettings, 'description', ''),
-                    'power' => data_get($permissionSettings, 'power', 0),
-                    'group' => data_get($permissionSettings, 'group'),
-                ])
-                ->save();
-        }
+                $permission
+                    ->fill([
+                        'description' => data_get($permissionSettings, 'description', ''),
+                        'power' => data_get($permissionSettings, 'power', 0),
+                        'group' => data_get($permissionSettings, 'group'),
+                    ])
+                    ->save();
+            });
     }
 
-    private function seedPolicyPermissions(): void
+    private function seedPolicies(): void
     {
-        if (!config('permissions.policies.generate', false) || !is_dir(app_path('Policies'))) {
+        if (!is_dir(app_path('Policies'))) {
             return;
         }
 
-        $existingPermissions = Permission::get();
-        $policyTypes = config('permissions.policies.types');
-
         $policies = collect(File::allFiles(app_path('Policies')))
             ->map(function (SplFileInfo $file) {
-                if (!str_contains($file->getBasename(), '.php') || str_contains($file->getBasename(), 'Abstract')) {
+                if (!str_contains($file->getBasename(), '.php')) {
                     return null;
                 }
-                return trim(
-                    ucwords(
-                        implode(
-                            ' ',
-                            preg_split('/(?=[A-Z])/', str_replace(['.php', 'Policy'], '', $file->getBasename()))
-                        )
-                    )
-                );
+                return 'App' . str_replace(['.php', app_path()], '', $file->getRealPath());
             })
             ->filter();
 
+        /** @var AbstractPolicy $policy */
         foreach ($policies as $policy) {
-            $this->info('Processing policy: ' . $policy);
-            foreach ($policyTypes as $type) {
-                $name = $type . ' ' . $policy;
-                $perm = $existingPermissions->firstWhere('name', $name)
-                    ?? new Permission([
-                        'name' => $name,
-                    ]);
-
-                $this->info(($perm->exists ? 'Updating' : 'Adding') . ' policy permission: ' . $name);
-
-                $perm
-                    ->fill([
-                        'description' => $type . (Str::contains($type, 'Any') ? ' ' : ' a ') . $policy,
-                        'power' => data_get($this->defaults, 'power', 0),
-                        'group' => $policy,
-                    ])
-                    ->save();
+            if (!is_subclass_of($policy, AbstractPolicy::class)) {
+                continue;
             }
+            $policy = new $policy;
+            $this->info('Registering App Policies: ' . $policy->policyName());
+            $this->permissionsToSync = array_merge($this->permissionsToSync, $policy->permissions());
         }
     }
 
-    private function processPermissions(array $permissions): void
+    private function registerPermissions(array $results): void
     {
+        $permissions = array_merge(config('permissions.permissions', []), ...$results);
         foreach ($permissions as $permission) {
-            if ($permission instanceof Arrayable && !($permission instanceof RegisterPermission)) {
-                $this->processPermissions($permission->toArray());
+
+            if ($permission instanceof RegisterPermission) {
+                $this->info('Registering Package Permission: ' . $permission->name());
+                $this->permissionsToSync[] = $permission->toArray();
                 continue;
             }
 
-            if (is_array($permission)) {
-                $this->processPermissions($permission);
+            if (is_subclass_of($permission, AbstractPolicy::class)) {
+                /** @var AbstractPolicy $policy */
+                $policy = new $permission;
+                $this->info('Registering Package Policies: ' . $policy->policyName());
+                $this->permissionsToSync = array_merge(
+                    $this->permissionsToSync,
+                    collect($policy->permissions())
+                        ->pluck('name')
+                        ->toArray()
+                );
                 continue;
             }
 
-            if (!($permission instanceof RegisterPermission)) {
-                throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class);
-            }
-
-            $this->info('Registering permission: ' . $permission->name());
-            $this->permissionsToSync[] = $permission->toArray();
+            throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class . ' or ' . AbstractPolicy::class);
         }
     }
 }

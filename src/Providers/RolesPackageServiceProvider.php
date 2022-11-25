@@ -3,11 +3,14 @@
 namespace KieranFYI\Roles\Providers;
 
 use Exception;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use KieranFYI\Roles\Console\Commands\Sync\SyncPermissions;
 use KieranFYI\Roles\Console\Commands\Sync\SyncRoles;
+use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
+use KieranFYI\Roles\Listeners\RegisterPermissionListener;
 use KieranFYI\Roles\Models\Permissions\Permission;
 use KieranFYI\Roles\Models\Roles\Role;
 use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
@@ -57,6 +60,8 @@ class RolesPackageServiceProvider extends ServiceProvider
                 SyncPermissions::class,
                 SyncRoles::class,
             ]);
+
+            Event::listen(RegisterPermissionEvent::class, RegisterPermissionListener::class);
         }
     }
 }

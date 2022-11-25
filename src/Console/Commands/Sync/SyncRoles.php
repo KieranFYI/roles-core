@@ -5,9 +5,7 @@ namespace KieranFYI\Roles\Console\Commands\Sync;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
-use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 use KieranFYI\Roles\Events\Register\RegisterRoleEvent;
 use KieranFYI\Roles\Models\Roles\Role;
 use KieranFYI\Roles\Services\Register\RegisterRole;
@@ -39,7 +37,7 @@ class SyncRoles extends Command
     /**
      * @var array
      */
-    private array $rolesToSync;
+    private array $rolesToSync = [];
 
     /**
      * @var array
@@ -50,10 +48,6 @@ class SyncRoles extends Command
      * @var Collection
      */
     private Collection $permissions;
-    /**
-     * @var array
-     */
-    private array $policyTypes;
 
     /**
      * Execute the console command.
@@ -73,15 +67,13 @@ class SyncRoles extends Command
         $this->call(SyncPermissions::class, ['--force' => true]);
 
         $this->existingRoles = Role::get();
-        $this->rolesToSync = config('roles.roles');
         $this->defaults = config('roles.defaults');
-        $this->policyTypes = config('permissions.policies.types');
 
         /*
          * Send the global event to register other package roles
          */
         $results = event(RegisterRoleEvent::class, [], false);
-        $this->processRoles($results);
+        $this->registerRoles($results);
 
         $this->seedRoles();
 
@@ -128,54 +120,33 @@ class SyncRoles extends Command
             return;
         }
 
-        $permissionsToAdd = [];
-
-        foreach ($permissions as $name) {
-            if (!Str::contains($name, '*')) {
-                $permissionsToAdd[] = $name;
-                continue;
-            }
-
-            $name = trim(str_replace('*', '', $name));
-            foreach ($this->policyTypes as $type) {
-                $permissionsToAdd[] = $type . ' ' . $name;
-            }
-        }
-
         $permissionsToRemove = $role->permissions
             ->pluck('name')
-            ->diff($permissionsToAdd);
+            ->diff($permissions);
 
         foreach ($permissionsToRemove as $name) {
             $this->info('Removing permission: ' . $name);
             $role->removePermission($name);
         }
 
-        foreach ($permissionsToAdd as $name) {
+        foreach ($permissions as $name) {
             $this->info('Adding permission: ' . $name);
             $role->addPermission($name);
         }
     }
 
-    private function processRoles(array $roles): void
+    private function registerRoles(array $results): void
     {
+        $roles = array_merge(config('roles.roles', []), ...$results);
         foreach ($roles as $role) {
-            if ($role instanceof Arrayable && !($role instanceof RegisterRole)) {
-                $this->processRoles($role->toArray());
+
+            if ($role instanceof RegisterRole) {
+                $this->info('Registering role: ' . $role->name());
+                $this->rolesToSync[] = $role->toArray();
                 continue;
             }
 
-            if (is_array($role)) {
-                $this->processRoles($role);
-                continue;
-            }
-
-            if (!($role instanceof RegisterRole)) {
-                throw new TypeError(self::class . '::handle(): ' . RegisterRoleEvent::class . ' return must be of type ' . RegisterRole::class);
-            }
-
-            $this->info('Registering role: ' . $role->name());
-            $this->rolesToSync[] = $role->toArray();
+            throw new TypeError(self::class . '::handle(): ' . RegisterRoleEvent::class . ' return must be of type ' . RegisterRole::class);
         }
     }
 }

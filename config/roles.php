@@ -1,5 +1,7 @@
 <?php
 
+use KieranFYI\Roles\Services\Register\RegisterRole;
+
 return [
     'defaults' => [
         'display_order' => 1,
@@ -8,26 +10,17 @@ return [
     ],
 
     'roles' => [
-        [
-            'name' => 'User',
-            'default' => true,
-            'permissions' => []
-        ],
-        [
-            'name' => 'Administrator',
-            'display_order' => 99,
-            'colour' => '#F1B828',
-            'permissions' => [
-                'Administrator'
-            ]
-        ],
-        [
-            'name' => 'Developer',
-            'display_order' => 100,
-            'colour' => '#3498DB',
-            'permissions' => [
-                'Developer',
-            ]
-        ],
+        RegisterRole::register('User')
+        ->default(),
+
+        RegisterRole::register('Administrator')
+            ->displayOrder(99)
+            ->colour('#F1B828')
+            ->permission('Administrator'),
+
+        RegisterRole::register('Developer')
+            ->displayOrder(100)
+            ->colour('#3498DB')
+            ->permission('Developer'),
     ]
 ];

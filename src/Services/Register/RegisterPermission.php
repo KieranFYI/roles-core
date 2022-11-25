@@ -35,6 +35,18 @@ class RegisterPermission implements Arrayable
     }
 
     /**
+     * @param string $name
+     * @param string $description
+     * @param int $power
+     * @param string|null $group
+     * @return RegisterPermission
+     */
+    public static function register(string $name, string $description = '', int $power = 0, string $group = null): RegisterPermission
+    {
+        return new static($name, $description, $power, $group);
+    }
+
+    /**
      * @return string
      */
     public function name(): string

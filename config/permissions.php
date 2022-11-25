@@ -1,5 +1,7 @@
 <?php
 
+use KieranFYI\Roles\Services\Register\RegisterPermission;
+
 return [
     'defaults' => [
         'description' => '',
@@ -7,26 +9,18 @@ return [
         'group' => null,
     ],
 
-    'policies' => [
-        'generate' => true,
-
-        'types' => [
-            'View Any', 'View', 'Create', 'Update', 'Delete', 'Restore', 'Force Delete'
-        ],
-    ],
-
     'permissions' => [
-        [
-            'name' => 'Administrator',
-            'description' => 'Provide Administrator functionality',
-            'power' => 99,
-            'group' => 'Ranks',
-        ],
-        [
-            'name' => 'Developer',
-            'description' => 'Allows viewing of the secret sauce',
-            'power' => 100,
-            'group' => 'Ranks',
-        ],
+        RegisterPermission::register(
+            'Administrator',
+            'Provide Administrator functionality',
+            99,
+            'Ranks'
+        ),
+        RegisterPermission::register(
+            'Developer',
+            'Allows viewing of the secret sauce',
+            100,
+            'Ranks'
+        ),
     ]
 ];
