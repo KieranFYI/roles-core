@@ -4,6 +4,7 @@ namespace KieranFYI\Roles\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use KieranFYI\Roles\Traits\Permissions\ForcePermissionsTrait;
 use KieranFYI\Roles\Traits\Permissions\HasPermissionsTrait;
 
 /**
@@ -16,6 +17,7 @@ use KieranFYI\Roles\Traits\Permissions\HasPermissionsTrait;
 class Role extends Model
 {
     use HasPermissionsTrait;
+    use ForcePermissionsTrait;
 
     /**
      * The attributes that are mass assignable.

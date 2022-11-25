@@ -4,6 +4,7 @@ namespace KieranFYI\Roles\Console\Commands\Permissions;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -64,13 +65,7 @@ class PermissionsSync extends Command
 
         // RegisterPermission
         $results = event(RegisterPermissionEvent::class, [], false);
-        foreach ($results as $permission) {
-            if (!($permission instanceof RegisterPermission)) {
-                throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class);
-            }
-
-            $this->permissionsToSync[] = $permission->toArray();
-        }
+        $this->processPermissions($results);
 
         $this->seedPermissions();
         $this->seedPolicyPermissions();
@@ -86,6 +81,8 @@ class PermissionsSync extends Command
                 ?? new Permission([
                     'name' => $permissionSettings['name']
                 ]);
+
+            $this->info(($perm->exists ? 'Updating' : 'Adding') . ' permission ' . $permissionSettings['name']);
 
             $perm
                 ->fill([
@@ -123,12 +120,15 @@ class PermissionsSync extends Command
             ->filter();
 
         foreach ($policies as $policy) {
+            $this->info('Processing policy: ' . $policy);
             foreach ($policyTypes as $type) {
                 $name = $type . ' ' . $policy;
                 $perm = $existingPermissions->firstWhere('name', $name)
                     ?? new Permission([
                         'name' => $name,
                     ]);
+
+                $this->info(($perm->exists ? 'Updating' : 'Adding') . ' policy permission: ' . $name);
 
                 $perm
                     ->fill([
@@ -138,6 +138,28 @@ class PermissionsSync extends Command
                     ])
                     ->save();
             }
+        }
+    }
+
+    private function processPermissions(array $results)
+    {
+        foreach ($results as $permission) {
+            if ($permission instanceof Arrayable) {
+                $this->processPermissions($permission->toArray());
+                continue;
+            }
+
+            if (is_array($permission)) {
+                $this->processPermissions($permission);
+                continue;
+            }
+
+            if (!($permission instanceof RegisterPermission)) {
+                throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class);
+            }
+
+            $this->info('Registering permission: ' . $permission->name());
+            $this->permissionsToSync[] = $permission->toArray();
         }
     }
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @mixin Model
  */
-class ForcePermissionsTrait
+trait ForcePermissionsTrait
 {
     public function initializeForcePermissionsTrait(): void
     {

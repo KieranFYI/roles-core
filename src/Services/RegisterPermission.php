@@ -35,6 +35,14 @@ class RegisterPermission implements Arrayable
     }
 
     /**
+     * @return string
+     */
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    /**
      * @return array
      */
     public function toArray(): array

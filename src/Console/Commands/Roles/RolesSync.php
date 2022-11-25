@@ -87,6 +87,7 @@ class RolesSync extends Command
                 ?? new Role([
                     'name' => $roleSettings['name']
                 ]);
+            $this->info(($role->exists ? 'Updating' : 'Adding') . ' role: ' . $roleSettings['name']);
 
             $role
                 ->fill([
@@ -106,7 +107,10 @@ class RolesSync extends Command
     private function syncPermissions(Role $role, array $permissions)
     {
         if (empty($permissions)) {
-            $role->permissions()->sync([]);
+            if ($role->permissions->isEmpty()) {
+                $this->info('Removing all permissions: ' . $role->name);
+                $role->permissions()->sync([]);
+            }
             return;
         }
 
@@ -129,10 +133,12 @@ class RolesSync extends Command
             ->diff($permissionsToAdd);
 
         foreach ($permissionsToRemove as $name) {
+            $this->info('Removing permission: ' . $name);
             $role->removePermission($name);
         }
 
         foreach ($permissionsToAdd as $name) {
+            $this->info('Adding permission: ' . $name);
             $role->addPermission($name);
         }
     }
