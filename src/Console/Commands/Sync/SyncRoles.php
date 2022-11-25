@@ -1,15 +1,19 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands\Roles;
+namespace KieranFYI\Roles\Console\Commands\Sync;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use KieranFYI\Roles\Events\Register\RegisterRoleEvent;
 use KieranFYI\Roles\Models\Roles\Role;
+use KieranFYI\Roles\Services\Register\RegisterRole;
+use TypeError;
 
-class RolesSync extends Command
+class SyncRoles extends Command
 {
     use ConfirmableTrait;
 
@@ -18,7 +22,7 @@ class RolesSync extends Command
      *
      * @var string
      */
-    protected $signature = 'roles:sync';
+    protected $signature = 'sync:roles';
 
     /**
      * The console command description.
@@ -59,14 +63,25 @@ class RolesSync extends Command
      */
     public function handle(): int
     {
-        if (!$this->confirmToProceed()) {
+        if (
+            !$this->confirmToProceed()
+            || !$this->confirmToProceed('Permission Sync will also be forced')
+        ) {
             return self::FAILURE;
         }
+
+        $this->call(SyncPermissions::class, ['--force' => true]);
 
         $this->existingRoles = Role::get();
         $this->rolesToSync = config('roles.roles');
         $this->defaults = config('roles.defaults');
         $this->policyTypes = config('permissions.policies.types');
+
+        /*
+         * Send the global event to register other package roles
+         */
+        $results = event(RegisterRoleEvent::class, [], false);
+        $this->processRoles($results);
 
         $this->seedRoles();
 
@@ -78,7 +93,6 @@ class RolesSync extends Command
      */
     private function seedRoles()
     {
-
         foreach ($this->rolesToSync as $roleSettings) {
             $roleSettings = array_merge($this->defaults, $roleSettings);
 
@@ -140,6 +154,28 @@ class RolesSync extends Command
         foreach ($permissionsToAdd as $name) {
             $this->info('Adding permission: ' . $name);
             $role->addPermission($name);
+        }
+    }
+
+    private function processRoles(array $roles): void
+    {
+        foreach ($roles as $role) {
+            if ($role instanceof Arrayable && !($role instanceof RegisterRole)) {
+                $this->processRoles($role->toArray());
+                continue;
+            }
+
+            if (is_array($role)) {
+                $this->processRoles($role);
+                continue;
+            }
+
+            if (!($role instanceof RegisterRole)) {
+                throw new TypeError(self::class . '::handle(): ' . RegisterRoleEvent::class . ' return must be of type ' . RegisterRole::class);
+            }
+
+            $this->info('Registering role: ' . $role->name());
+            $this->rolesToSync[] = $role->toArray();
         }
     }
 }

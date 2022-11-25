@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Events;
+namespace KieranFYI\Roles\Events\Register;
 
 class RegisterPermissionEvent
 {

@@ -6,8 +6,8 @@ use Exception;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use KieranFYI\Roles\Console\Commands\Permissions\PermissionsSync;
-use KieranFYI\Roles\Console\Commands\Roles\RolesSync;
+use KieranFYI\Roles\Console\Commands\Sync\SyncPermissions;
+use KieranFYI\Roles\Console\Commands\Sync\SyncRoles;
 use KieranFYI\Roles\Models\Permissions\Permission;
 use KieranFYI\Roles\Models\Roles\Role;
 use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
@@ -54,8 +54,8 @@ class RolesPackageServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                PermissionsSync::class,
-                RolesSync::class,
+                SyncPermissions::class,
+                SyncRoles::class,
             ]);
         }
     }

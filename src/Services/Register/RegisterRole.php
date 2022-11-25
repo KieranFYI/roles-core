@@ -1,10 +1,10 @@
 <?php
 
-namespace KieranFYI\Roles\Services;
+namespace KieranFYI\Roles\Services\Register;
 
 use Illuminate\Contracts\Support\Arrayable;
 
-class RegisterPermission implements Arrayable
+class RegisterRole implements Arrayable
 {
     /**
      * @var string

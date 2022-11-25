@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands\Permissions;
+namespace KieranFYI\Roles\Console\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
@@ -8,13 +8,13 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use KieranFYI\Roles\Events\RegisterPermissionEvent;
+use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
 use KieranFYI\Roles\Models\Permissions\Permission;
-use KieranFYI\Roles\Services\RegisterPermission;
+use KieranFYI\Roles\Services\Register\RegisterPermission;
 use SplFileInfo;
 use TypeError;
 
-class PermissionsSync extends Command
+class SyncPermissions extends Command
 {
     use ConfirmableTrait;
 
@@ -23,7 +23,7 @@ class PermissionsSync extends Command
      *
      * @var string
      */
-    protected $signature = 'permissions:sync';
+    protected $signature = 'sync:permissions';
 
     /**
      * The console command description.
@@ -62,8 +62,9 @@ class PermissionsSync extends Command
         $this->defaults = config('permissions.defaults');
         $this->permissionsToSync = config('permissions.permissions');
 
-
-        // RegisterPermission
+        /*
+         * Send the global event to register other package permissions
+         */
         $results = event(RegisterPermissionEvent::class, [], false);
         $this->processPermissions($results);
 
@@ -141,10 +142,10 @@ class PermissionsSync extends Command
         }
     }
 
-    private function processPermissions(array $results)
+    private function processPermissions(array $permissions): void
     {
-        foreach ($results as $permission) {
-            if ($permission instanceof Arrayable) {
+        foreach ($permissions as $permission) {
+            if ($permission instanceof Arrayable && !($permission instanceof RegisterPermission)) {
                 $this->processPermissions($permission->toArray());
                 continue;
             }
