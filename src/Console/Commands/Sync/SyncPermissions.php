@@ -141,9 +141,7 @@ class SyncPermissions extends Command
                 $this->info('Registering Package Policies: ' . $policy->policyName());
                 $this->permissionsToSync = array_merge(
                     $this->permissionsToSync,
-                    collect($policy->permissions())
-                        ->pluck('name')
-                        ->toArray()
+                    $policy->permissions()
                 );
                 continue;
             }

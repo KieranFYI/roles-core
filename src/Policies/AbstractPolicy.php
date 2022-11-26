@@ -24,6 +24,10 @@ abstract class AbstractPolicy
     {
         $name = str_replace('Policy', '', substr(strrchr(static::class, '\\'), 1));
         $this->policyName = trim(ucwords(implode(' ', preg_split('/(?=[A-Z])/', $name))));
+
+        if (empty($this->policyName)) {
+            throw new Exception('Invalid Class Name: ' . static::class);
+        }
     }
 
     /**
