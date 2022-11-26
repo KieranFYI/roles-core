@@ -5,9 +5,12 @@ namespace KieranFYI\Roles\Models\Roles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use KieranFYI\Logging\Traits\LoggingTrait;
 
 class RoleLink extends Model
 {
+    use LoggingTrait;
+
     /**
      * @return BelongsTo
      */

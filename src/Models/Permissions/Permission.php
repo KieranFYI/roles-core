@@ -3,6 +3,7 @@
 namespace KieranFYI\Roles\Models\Permissions;
 
 use Illuminate\Database\Eloquent\Model;
+use KieranFYI\Logging\Traits\LoggingTrait;
 
 /**
  * @property integer $id
@@ -13,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
+    use LoggingTrait;
+
     /**
      * The attributes that are mass assignable.
      *
