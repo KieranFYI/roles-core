@@ -43,6 +43,9 @@ class RolesPackageServiceProvider extends ServiceProvider
             $root . '/config/permissions.php' => config_path('permissions.php')
         ], ['roles', 'roles-config']);
 
+        $this->mergeConfigFrom($root . '/config/roles.php', 'roles');
+        $this->mergeConfigFrom($root . '/config/permissions.php', 'permissions');
+
         $this->loadMigrationsFrom($root . '/database/migrations');
 
         $this->registerPolicies();
