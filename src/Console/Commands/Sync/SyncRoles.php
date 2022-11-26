@@ -72,6 +72,7 @@ class SyncRoles extends Command
         /*
          * Send the global event to register other package roles
          */
+        $this->info('Registering Roles');
         $results = event(RegisterRoleEvent::class, [], false);
         $this->registerRoles($results);
 

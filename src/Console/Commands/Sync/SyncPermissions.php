@@ -63,6 +63,7 @@ class SyncPermissions extends Command
         /*
          * Send the global event to register other package permissions
          */
+        $this->info('Registering Permissions');
         $results = event(RegisterPermissionEvent::class, [], false);
         $this->registerPermissions($results);
 
