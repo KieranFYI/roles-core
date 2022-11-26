@@ -4,7 +4,7 @@ namespace KieranFYI\Roles\Listeners;
 use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
 use KieranFYI\Roles\Policies\Roles\RolePolicy;
 
-class RegisterPermissionListener
+class RegisterPermissionsListener
 {
     /**
      * Handle the event.

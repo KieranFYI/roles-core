@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use KieranFYI\Roles\Console\Commands\Sync\SyncPermissions;
 use KieranFYI\Roles\Console\Commands\Sync\SyncRoles;
 use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
-use KieranFYI\Roles\Listeners\RegisterPermissionListener;
+use KieranFYI\Roles\Listeners\RegisterPermissionsListener;
 use KieranFYI\Roles\Models\Permissions\Permission;
 use KieranFYI\Roles\Models\Roles\Role;
 use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
@@ -64,7 +64,7 @@ class RolesPackageServiceProvider extends ServiceProvider
                 SyncRoles::class,
             ]);
 
-            Event::listen(RegisterPermissionEvent::class, RegisterPermissionListener::class);
+            Event::listen(RegisterPermissionEvent::class, RegisterPermissionsListener::class);
         }
     }
 }
