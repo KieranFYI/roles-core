@@ -20,7 +20,7 @@ class SyncRoles extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:roles';
+    protected $signature = 'sync:roles {--force : Force the operation to run when in production}';
 
     /**
      * The console command description.

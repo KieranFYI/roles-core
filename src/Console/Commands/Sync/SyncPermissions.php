@@ -22,7 +22,7 @@ class SyncPermissions extends Command
      *
      * @var string
      */
-    protected $signature = 'sync:permissions';
+    protected $signature = 'sync:permissions {--force : Force the operation to run when in production}';
 
     /**
      * The console command description.
