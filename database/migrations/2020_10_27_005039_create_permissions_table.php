@@ -19,6 +19,8 @@ return new class extends Migration {
             $table->string('description');
             $table->unsignedInteger('power')
                 ->default(0);
+            $table->string('group')
+                ->default('');
             $table->timestamps();
         });
     }
