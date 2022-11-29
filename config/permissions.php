@@ -1,6 +1,6 @@
 <?php
 
-use KieranFYI\Roles\Services\Register\RegisterPermission;
+use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
 
 return [
     'defaults' => [

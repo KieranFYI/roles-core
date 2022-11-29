@@ -1,12 +1,12 @@
 <?php
 
-namespace KieranFYI\Roles\Models\Roles;
+namespace KieranFYI\Roles\Core\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use KieranFYI\Logging\Traits\LoggingTrait;
-use KieranFYI\Roles\Traits\Permissions\ForcePermissionsTrait;
-use KieranFYI\Roles\Traits\Permissions\HasPermissionsTrait;
+use KieranFYI\Roles\Core\Traits\Permissions\ForcePermissionsTrait;
+use KieranFYI\Roles\Core\Traits\Permissions\HasPermissionsTrait;
 
 /**
  * @property integer $id

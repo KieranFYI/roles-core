@@ -1,21 +1,21 @@
 <?php
 
-namespace KieranFYI\Roles\Providers;
+namespace KieranFYI\Roles\Core\Providers;
 
 use Exception;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use KieranFYI\Roles\Console\Commands\Sync\SyncPermissions;
-use KieranFYI\Roles\Console\Commands\Sync\SyncRoles;
-use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
-use KieranFYI\Roles\Listeners\RegisterPermissionsListener;
-use KieranFYI\Roles\Models\Permissions\Permission;
-use KieranFYI\Roles\Models\Roles\Role;
-use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
-use KieranFYI\Roles\Policies\Roles\RolePolicy;
-use KieranFYI\Roles\Traits\Policies\RegistersPoliciesTrait;
+use KieranFYI\Roles\Core\Console\Commands\Sync\SyncPermissions;
+use KieranFYI\Roles\Core\Console\Commands\Sync\SyncRoles;
+use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
+use KieranFYI\Roles\Core\Listeners\RegisterPermissionsListener;
+use KieranFYI\Roles\Core\Models\Permissions\Permission;
+use KieranFYI\Roles\Core\Models\Roles\Role;
+use KieranFYI\Roles\Core\Policies\Permissions\PermissionPolicy;
+use KieranFYI\Roles\Core\Policies\Roles\RolePolicy;
+use KieranFYI\Roles\Core\Traits\Policies\RegistersPoliciesTrait;
 
 class RolesPackageServiceProvider extends ServiceProvider
 {

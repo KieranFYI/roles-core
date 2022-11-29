@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Models\Permissions;
+namespace KieranFYI\Roles\Core\Models\Permissions;
 
 use Illuminate\Database\Eloquent\Model;
 use KieranFYI\Logging\Traits\LoggingTrait;

@@ -1,12 +1,12 @@
 <?php
 
-namespace KieranFYI\Roles\Traits\Permissions;
+namespace KieranFYI\Roles\Core\Traits\Permissions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use KieranFYI\Logging\Traits\LoggingTrait;
-use KieranFYI\Roles\Models\Permissions\Permission;
+use KieranFYI\Roles\Core\Models\Permissions\Permission;
 
 /**
  * @property Collection $permissions

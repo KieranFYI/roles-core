@@ -1,14 +1,14 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands\Sync;
+namespace KieranFYI\Roles\Core\Console\Commands\Sync;
 
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
-use KieranFYI\Roles\Events\Register\RegisterRoleEvent;
-use KieranFYI\Roles\Models\Roles\Role;
-use KieranFYI\Roles\Services\Register\RegisterRole;
+use KieranFYI\Roles\Core\Events\Register\RegisterRoleEvent;
+use KieranFYI\Roles\Core\Models\Roles\Role;
+use KieranFYI\Roles\Core\Services\Register\RegisterRole;
 use TypeError;
 
 class SyncRoles extends Command

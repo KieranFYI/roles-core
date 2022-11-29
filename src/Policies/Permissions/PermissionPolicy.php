@@ -1,8 +1,8 @@
 <?php
 
-namespace KieranFYI\Roles\Policies\Permissions;
+namespace KieranFYI\Roles\Core\Policies\Permissions;
 
-use KieranFYI\Roles\Policies\AbstractPolicy;
+use KieranFYI\Roles\Core\Policies\AbstractPolicy;
 
 class PermissionPolicy extends AbstractPolicy
 {

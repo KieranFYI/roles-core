@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Traits\Permissions;
+namespace KieranFYI\Roles\Core\Traits\Permissions;
 
 use Illuminate\Database\Eloquent\Model;
 

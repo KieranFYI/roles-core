@@ -1,15 +1,15 @@
 <?php
 
-namespace KieranFYI\Roles\Console\Commands\Sync;
+namespace KieranFYI\Roles\Core\Console\Commands\Sync;
 
 use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
-use KieranFYI\Roles\Events\Register\RegisterPermissionEvent;
-use KieranFYI\Roles\Models\Permissions\Permission;
-use KieranFYI\Roles\Policies\AbstractPolicy;
-use KieranFYI\Roles\Services\Register\RegisterPermission;
+use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
+use KieranFYI\Roles\Core\Models\Permissions\Permission;
+use KieranFYI\Roles\Core\Policies\AbstractPolicy;
+use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
 use SplFileInfo;
 use TypeError;
 

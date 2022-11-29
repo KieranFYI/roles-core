@@ -1,8 +1,8 @@
 <?php
-namespace KieranFYI\Roles\Listeners;
+namespace KieranFYI\Roles\Core\Listeners;
 
-use KieranFYI\Roles\Policies\Permissions\PermissionPolicy;
-use KieranFYI\Roles\Policies\Roles\RolePolicy;
+use KieranFYI\Roles\Core\Policies\Permissions\PermissionPolicy;
+use KieranFYI\Roles\Core\Policies\Roles\RolePolicy;
 
 class RegisterPermissionsListener
 {

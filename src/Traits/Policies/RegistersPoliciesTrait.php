@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Traits\Policies;
+namespace KieranFYI\Roles\Core\Traits\Policies;
 
 use Illuminate\Support\Facades\Gate;
 use TypeError;

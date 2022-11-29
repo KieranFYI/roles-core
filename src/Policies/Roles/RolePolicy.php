@@ -1,8 +1,8 @@
 <?php
 
-namespace KieranFYI\Roles\Policies\Roles;
+namespace KieranFYI\Roles\Core\Policies\Roles;
 
-use KieranFYI\Roles\Policies\AbstractPolicy;
+use KieranFYI\Roles\Core\Policies\AbstractPolicy;
 
 class RolePolicy extends AbstractPolicy
 {

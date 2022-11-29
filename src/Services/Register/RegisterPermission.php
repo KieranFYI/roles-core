@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Services\Register;
+namespace KieranFYI\Roles\Core\Services\Register;
 
 use Illuminate\Contracts\Support\Arrayable;
 

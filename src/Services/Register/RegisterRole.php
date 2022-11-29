@@ -1,9 +1,9 @@
 <?php
 
-namespace KieranFYI\Roles\Services\Register;
+namespace KieranFYI\Roles\Core\Services\Register;
 
 use Illuminate\Contracts\Support\Arrayable;
-use KieranFYI\Roles\Policies\AbstractPolicy;
+use KieranFYI\Roles\Core\Policies\AbstractPolicy;
 
 class RegisterRole implements Arrayable
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Policies;
+namespace KieranFYI\Roles\Core\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;

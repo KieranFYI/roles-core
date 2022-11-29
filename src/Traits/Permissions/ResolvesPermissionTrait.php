@@ -1,8 +1,8 @@
 <?php
 
-namespace KieranFYI\Roles\Traits\Permissions;
+namespace KieranFYI\Roles\Core\Traits\Permissions;
 
-use KieranFYI\Roles\Models\Permissions\Permission;
+use KieranFYI\Roles\Core\Models\Permissions\Permission;
 
 trait ResolvesPermissionTrait
 {

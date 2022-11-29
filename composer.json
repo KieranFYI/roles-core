@@ -1,11 +1,11 @@
 {
-    "name": "kieranfyi/roles",
+    "name": "kieranfyi/roles-core",
     "type": "project",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "KieranFYI\\Roles\\": "src/"
+            "KieranFYI\\Roles\\Core\\": "src/"
         }
     },
     "authors": [
@@ -28,7 +28,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "KieranFYI\\Roles\\Providers\\RolesPackageServiceProvider"
+                "KieranFYI\\Roles\\Core\\Providers\\RolesPackageServiceProvider"
             ]
         }
     },

@@ -1,6 +1,6 @@
 <?php
 
-namespace KieranFYI\Roles\Models\Roles;
+namespace KieranFYI\Roles\Core\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

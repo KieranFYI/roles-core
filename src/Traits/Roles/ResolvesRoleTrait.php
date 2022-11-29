@@ -1,8 +1,8 @@
 <?php
 
-namespace KieranFYI\Roles\Traits\Roles;
+namespace KieranFYI\Roles\Core\Traits\Roles;
 
-use KieranFYI\Roles\Models\Roles\Role;
+use KieranFYI\Roles\Core\Models\Roles\Role;
 
 trait ResolvesRoleTrait
 {
