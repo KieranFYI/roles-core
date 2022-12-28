@@ -3,6 +3,7 @@
 namespace KieranFYI\Roles\Core\Providers;
 
 use Exception;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncPermissions;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncRoles;
 use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
+use KieranFYI\Roles\Core\Http\Middleware\HasPermission;
 use KieranFYI\Roles\Core\Listeners\RegisterPermissionsListener;
 use KieranFYI\Roles\Core\Models\Permissions\Permission;
 use KieranFYI\Roles\Core\Models\Roles\Role;
@@ -34,7 +36,7 @@ class RolesPackageServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
         $root = __DIR__ . '/../..';
 
@@ -57,6 +59,8 @@ class RolesPackageServiceProvider extends ServiceProvider
             }
             return $modelClass;
         });
+
+        $router->middleware('perm', HasPermission::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

@@ -11,12 +11,6 @@ return [
 
     'permissions' => [
         RegisterPermission::register(
-            'Administrator',
-            'Provide Administrator functionality',
-            99,
-            'Ranks'
-        ),
-        RegisterPermission::register(
             'Developer',
             'Allows viewing of the secret sauce',
             100,
