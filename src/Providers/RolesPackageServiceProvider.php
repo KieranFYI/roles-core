@@ -60,7 +60,7 @@ class RolesPackageServiceProvider extends ServiceProvider
             return $modelClass;
         });
 
-        $router->middleware('perm', HasPermission::class);
+        $router->aliasMiddleware('perm', HasPermission::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

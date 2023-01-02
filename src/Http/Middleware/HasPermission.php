@@ -19,6 +19,8 @@ class HasPermission
     public function handle(Request $request, Closure $next, string $permission)
     {
         $user = Auth::user();
+        abort_if(is_null($user), 403);
+
         if (method_exists($user, 'hasPermission') && $user->hasPermission($permission)) {
             return $next($request);
         }
