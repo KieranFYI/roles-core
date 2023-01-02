@@ -11,7 +11,7 @@ return [
 
     'roles' => [
         RegisterRole::register('User')
-        ->default(),
+            ->default(),
         RegisterRole::register('Developer')
             ->displayOrder(100)
             ->colour('#3498DB')
