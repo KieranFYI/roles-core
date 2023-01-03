@@ -15,7 +15,7 @@ use KieranFYI\Roles\Core\Traits\Permissions\ResolvesPermissionTrait;
  *
  * @mixin Model
  */
-class HasRolesTrait
+trait HasRolesTrait
 {
     use ResolvesRoleTrait;
     use ResolvesPermissionTrait;
