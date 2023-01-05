@@ -127,12 +127,16 @@ class SyncRoles extends Command
 
         foreach ($permissionsToRemove as $name) {
             $this->info('Removing permission: ' . $name);
-            $role->removePermission($name);
+            if ($role->hasPermission($name)) {
+                $role->removePermission($name);
+            }
         }
 
         foreach ($permissions as $name) {
             $this->info('Adding permission: ' . $name);
-            $role->addPermission($name);
+            if (!$role->hasPermission($name)) {
+                $role->addPermission($name);
+            }
         }
     }
 

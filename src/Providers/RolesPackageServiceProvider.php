@@ -53,9 +53,14 @@ class RolesPackageServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::guessPolicyNamesUsing(function ($modelClass) {
-            $modelClass = Str::replace('App\\Models', 'App\\Policies', $modelClass) . 'Policy';
+            $modelClass = Str::replace('App\\Models', 'App\\Policies', $modelClass);
             if (!class_exists($modelClass)) {
-                throw new Exception('Unable to find Policy: ' . $modelClass);
+                if (!Str::endsWith($modelClass, 'Policy')) {
+                    $modelClass .= 'Policy';
+                }
+                if (!class_exists($modelClass)) {
+                    throw new Exception('Unable to find Policy: ' . $modelClass);
+                }
             }
             return $modelClass;
         });

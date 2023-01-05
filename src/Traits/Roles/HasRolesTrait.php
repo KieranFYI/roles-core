@@ -45,7 +45,8 @@ trait HasRolesTrait
      */
     public function roles(): MorphToMany
     {
-        return $this->morphToMany(Role::class, 'model', 'role_links');
+        return $this->morphToMany(Role::class, 'model', 'role_links')
+            ->withTimestamps();
     }
 
     /**
@@ -129,10 +130,10 @@ trait HasRolesTrait
     public function hasPermission(Permission|string $permission): bool
     {
         $permission = $this->resolvePermission($permission);
-
         return $this->roles
-            ->pluck('permissions.id')
-            ->contains($permission->id);
+            ->pluck('permissions')
+            ->flatten()
+            ->contains('id', $permission->id);
     }
 
 }

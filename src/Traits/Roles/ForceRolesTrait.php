@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 trait ForceRolesTrait
 {
-    public function initializeForcePermissionsTrait(): void
+    public function initializeForceRolesTrait(): void
     {
         array_push($this->with, 'roles', 'roles.permissions');
     }
