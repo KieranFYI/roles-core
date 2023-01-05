@@ -92,7 +92,11 @@ class RegisterRole implements Arrayable
 
         /** @var AbstractPolicy $policy */
         $policy = new $permission;
-        $this->permissions = array_merge($this->permissions, $policy->permissions($methods));
+        $permissions = collect($policy->permissions($methods))
+            ->pluck('name')
+            ->toArray();
+        $this->permissions = array_merge($this->permissions, $permissions);
+
         return $this;
     }
 
