@@ -61,7 +61,8 @@ abstract class AbstractPolicy
             $this->blacklist(),
             [
                 '__construct', 'policyName', 'blacklist', 'permissions',
-                'allow', 'deny', 'denyWithStatus', 'denyAsNotFound'
+                'allow', 'deny', 'denyWithStatus', 'denyAsNotFound',
+                'hasPermission'
             ]
         );
 
