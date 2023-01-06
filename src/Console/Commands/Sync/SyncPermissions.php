@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Console\ConfirmableTrait;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
 use KieranFYI\Roles\Core\Models\Permissions\Permission;
 use KieranFYI\Roles\Core\Policies\AbstractPolicy;
@@ -109,7 +110,12 @@ class SyncPermissions extends Command
                 if (!str_contains($file->getBasename(), '.php')) {
                     return null;
                 }
-                return 'App' . str_replace(['.php', app_path()], '', $file->getRealPath());
+
+                $class = Str::of($file->getRealPath())
+                    ->replace(['.php', app_path()], '')
+                    ->replace('/', '\\')
+                    ->toString();
+                return 'App' . $class;
             })
             ->filter();
 
