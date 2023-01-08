@@ -16,7 +16,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "KieranFYI\\Roles\\Core\\Providers\\RolesPackageServiceProvider"
+                "KieranFYI\\Roles\\Core\\Providers\\RolesCorePackageServiceProvider"
             ]
         }
     },

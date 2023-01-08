@@ -19,7 +19,7 @@ use KieranFYI\Roles\Core\Policies\Permissions\PermissionPolicy;
 use KieranFYI\Roles\Core\Policies\Roles\RolePolicy;
 use KieranFYI\Roles\Core\Traits\Policies\RegistersPoliciesTrait;
 
-class RolesPackageServiceProvider extends ServiceProvider
+class RolesCorePackageServiceProvider extends ServiceProvider
 {
     use RegistersPoliciesTrait;
 
