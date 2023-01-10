@@ -8,6 +8,11 @@ use KieranFYI\Roles\Core\Policies\AbstractPolicy;
 class RegisterRole implements Arrayable
 {
     /**
+     * @var array
+     */
+    private static array $roles = [];
+
+    /**
      * @var string
      */
     private string $name;
@@ -43,7 +48,17 @@ class RegisterRole implements Arrayable
      */
     public static function register(string $name): RegisterRole
     {
-        return new static($name);
+        if (!isset(self::$roles[$name])) {
+            self::$roles[$name] = new static($name);
+        }
+        return self::$roles[$name];
+    }
+
+    /**
+     * @return array
+     */
+    public static function roles() {
+        return self::$roles;
     }
 
     /**
@@ -86,16 +101,21 @@ class RegisterRole implements Arrayable
     public function permission(string|AbstractPolicy $permission, array $methods = []): static
     {
         if (!is_subclass_of($permission, AbstractPolicy::class)) {
-            $this->permissions[] = $permission;
+            if (!in_array($permission, $this->permissions)) {
+                $this->permissions[] = $permission;
+            }
             return $this;
         }
 
         /** @var AbstractPolicy $policy */
         $policy = new $permission;
-        $permissions = collect($policy->permissions($methods))
+        collect($policy->permissions($methods))
             ->pluck('name')
-            ->toArray();
-        $this->permissions = array_merge($this->permissions, $permissions);
+            ->each(function (string $permission) {
+                if (!in_array($permission, $this->permissions)) {
+                    $this->permissions[] = $permission;
+                }
+            });
 
         return $this;
     }

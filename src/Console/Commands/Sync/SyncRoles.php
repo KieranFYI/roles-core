@@ -73,8 +73,8 @@ class SyncRoles extends Command
          * Send the global event to register other package roles
          */
         $this->info('Registering Roles');
-        $results = event(RegisterRoleEvent::class, [], false);
-        $this->registerRoles($results);
+        event(RegisterRoleEvent::class, [], false);
+        $this->registerRoles();
 
         $this->seedRoles();
 
@@ -109,6 +109,23 @@ class SyncRoles extends Command
     }
 
     /**
+     * @return void
+     */
+    private function registerRoles(): void
+    {
+        foreach (RegisterRole::roles() as $role) {
+
+            if ($role instanceof RegisterRole) {
+                $this->info('Registering role: ' . $role->name());
+                $this->rolesToSync[] = $role->toArray();
+                continue;
+            }
+
+            throw new TypeError(self::class . '::handle(): ' . RegisterRoleEvent::class . ' return must be of type ' . RegisterRole::class);
+        }
+    }
+
+    /**
      * @throws Exception
      */
     private function syncPermissions(Role $role, array $permissions)
@@ -137,21 +154,6 @@ class SyncRoles extends Command
             if (!$role->hasPermission($name)) {
                 $role->addPermission($name);
             }
-        }
-    }
-
-    private function registerRoles(array $results): void
-    {
-        $roles = array_merge(config('roles.roles', []), ...$results);
-        foreach ($roles as $role) {
-
-            if ($role instanceof RegisterRole) {
-                $this->info('Registering role: ' . $role->name());
-                $this->rolesToSync[] = $role->toArray();
-                continue;
-            }
-
-            throw new TypeError(self::class . '::handle(): ' . RegisterRoleEvent::class . ' return must be of type ' . RegisterRole::class);
         }
     }
 }

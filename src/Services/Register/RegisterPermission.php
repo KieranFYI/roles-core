@@ -7,6 +7,11 @@ use Illuminate\Contracts\Support\Arrayable;
 class RegisterPermission implements Arrayable
 {
     /**
+     * @var array
+     */
+    private static array $permissions = [];
+
+    /**
      * @var string
      */
     private string $name;
@@ -43,7 +48,17 @@ class RegisterPermission implements Arrayable
      */
     public static function register(string $name, string $description = '', int $power = 0, string $group = null): RegisterPermission
     {
-        return new static($name, $description, $power, $group);
+        if (!isset(self::$permissions[$name])) {
+            self::$permissions[$name] = new static($name, $description, $power, $group);
+        }
+        return self::$permissions[$name];
+    }
+
+    /**
+     * @return array
+     */
+    public static function permissions() {
+        return self::$permissions;
     }
 
     /**

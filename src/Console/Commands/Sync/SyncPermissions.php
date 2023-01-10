@@ -132,16 +132,22 @@ class SyncPermissions extends Command
 
     private function registerPermissions(array $results): void
     {
-        $permissions = array_merge(config('permissions.permissions', []), ...$results);
-        foreach ($permissions as $permission) {
+        foreach (RegisterPermission::permissions() as $permission) {
+            $this->info('Registering Package Permission: ' . $permission->name());
+            $this->permissionsToSync[] = $permission->toArray();
+        }
 
-            if ($permission instanceof RegisterPermission) {
-                $this->info('Registering Package Permission: ' . $permission->name());
-                $this->permissionsToSync[] = $permission->toArray();
-                continue;
-            }
+        foreach ($results as $permissions) {
+            foreach ($permissions as $permission) {
+                if (is_a($permission, RegisterPermission::class, true)) {
+                    continue;
+                }
 
-            if (is_subclass_of($permission, AbstractPolicy::class)) {
+                if (!is_subclass_of($permission, AbstractPolicy::class)) {
+                    dd($permission);
+                    throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . AbstractPolicy::class . ', found ' . get_class($permission));
+                }
+
                 /** @var AbstractPolicy $policy */
                 $policy = new $permission;
                 $this->info('Registering Package Policies: ' . $policy->policyName());
@@ -149,10 +155,8 @@ class SyncPermissions extends Command
                     $this->permissionsToSync,
                     $policy->permissions()
                 );
-                continue;
-            }
 
-            throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . RegisterPermission::class . ' or ' . AbstractPolicy::class);
+            }
         }
     }
 }

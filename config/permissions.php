@@ -7,14 +7,5 @@ return [
         'description' => '',
         'power' => 0,
         'group' => null,
-    ],
-
-    'permissions' => [
-        RegisterPermission::register(
-            'Developer',
-            'Allows viewing of the secret sauce',
-            100,
-            'Ranks'
-        ),
     ]
 ];
