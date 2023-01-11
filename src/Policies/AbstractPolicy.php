@@ -2,11 +2,8 @@
 
 namespace KieranFYI\Roles\Core\Policies;
 
-use Auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User;
 
 abstract class AbstractPolicy
 {
@@ -49,9 +46,10 @@ abstract class AbstractPolicy
     }
 
     /**
+     * @param array $methods
      * @return array
      */
-    public function permissions($methods = []): array
+    public function methods(array $methods = []): array
     {
         if (empty($methods)) {
             $methods = get_class_methods($this);
@@ -66,8 +64,16 @@ abstract class AbstractPolicy
             ]
         );
 
-        return collect($methods)
-            ->diff($blacklist)
+        return array_diff($methods, $blacklist);
+    }
+
+    /**
+     * @param array $methods
+     * @return array
+     */
+    public function permissions(array $methods = []): array
+    {
+        return collect($this->methods($methods))
             ->map(function (string $method) {
                 $method = trim(ucwords(implode(' ', preg_split('/(?=[A-Z])/', $method))));
                 $description = '';
@@ -85,9 +91,8 @@ abstract class AbstractPolicy
      * @param string $prefix
      * @return bool
      */
-    private function hasPermission(string $prefix): bool
+    protected function hasPermission(mixed $user, string $prefix): bool
     {
-        $user = Auth::user();
         if (method_exists($user, 'hasPermission')) {
             return $user->hasPermission($prefix . ' ' . $this->policyName());
         }
@@ -97,76 +102,82 @@ abstract class AbstractPolicy
     /**
      * Determine whether the user can view any models.
      *
+     * @param mixed $user
      * @return bool
      */
-    public function viewAny(mixed $m = null): bool
+    public function viewAny(mixed $user): bool
     {
-        return $this->hasPermission('View Any');
+        return $this->hasPermission($user, 'View Any');
     }
 
     /**
      * Determine whether the user can view the model.
      *
+     * @param mixed $user
      * @param Model $model
      * @return bool
      */
-    public function view(Model $model): bool
+    public function view(mixed $user, Model $model): bool
     {
-        return $this->hasPermission('View');
+        return $this->hasPermission($user, 'View');
     }
 
     /**
      * Determine whether the user can create models.
      *
+     * @param mixed $user
      * @return bool
      */
-    public function create(): bool
+    public function create(mixed $user): bool
     {
-        return $this->hasPermission('Create');
+        return $this->hasPermission($user, 'Create');
     }
 
     /**
      * Determine whether the user can update the model.
      *
+     * @param mixed $user
      * @param Model $model
      * @return bool
      */
-    public function update(Model $model): bool
+    public function update(mixed $user, Model $model): bool
     {
-        return $this->hasPermission('Update');
+        return $this->hasPermission($user, 'Update');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
+     * @param mixed $user
      * @param Model $model
      * @return bool
      */
-    public function delete(Model $model): bool
+    public function delete(mixed $user, Model $model): bool
     {
-        return $this->hasPermission('Delete');
+        return $this->hasPermission($user, 'Delete');
     }
 
     /**
      * Determine whether the user can restore the model.
      *
+     * @param mixed $user
      * @param Model $model
      * @return bool
      */
-    public function restore(Model $model): bool
+    public function restore(mixed $user, Model $model): bool
     {
-        return $this->hasPermission('Restore');
+        return $this->hasPermission($user, 'Restore');
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
+     * @param mixed $user
      * @param Model $model
      * @return bool
      */
-    public function forceDelete(Model $model): bool
+    public function forceDelete(mixed $user, Model $model): bool
     {
-        return $this->hasPermission('Force Delete');
+        return $this->hasPermission($user, 'Force Delete');
     }
-
 }

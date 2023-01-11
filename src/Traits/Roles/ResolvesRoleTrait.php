@@ -16,7 +16,11 @@ trait ResolvesRoleTrait
             return $role;
         }
 
-        return Role::where('name', $role)
+        if (!config()->has('roles.cache')) {
+            config(['roles.cache' => Role::get()]);
+        }
+
+        return config('roles.cache')->where('name', $role)
             ->firstOrFail();
     }
 }

@@ -16,7 +16,11 @@ trait ResolvesPermissionTrait
             return $permission;
         }
 
-        return Permission::where('name', $permission)
+        if (!config()->has('permissions.cache')) {
+            config(['permissions.cache' => Permission::get()]);
+        }
+
+        return config('permissions.cache')->where('name', $permission)
             ->firstOrFail();
     }
 }
