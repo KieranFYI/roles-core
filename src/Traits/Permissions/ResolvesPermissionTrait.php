@@ -20,7 +20,12 @@ trait ResolvesPermissionTrait
             config(['permissions.cache' => Permission::get()]);
         }
 
-        return config('permissions.cache')->where('name', $permission)
-            ->firstOrFail();
+        $model = config('permissions.cache')->where('name', $permission)
+            ->first();
+        if (is_null($model)) {
+            return Permission::where('name', $permission)->firstOrFail();
+        }
+
+        return $model;
     }
 }

@@ -12,7 +12,6 @@ use KieranFYI\Roles\Core\Models\Permissions\Permission;
 use KieranFYI\Roles\Core\Policies\AbstractPolicy;
 use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
 use SplFileInfo;
-use TypeError;
 
 class SyncPermissions extends Command
 {
@@ -65,8 +64,23 @@ class SyncPermissions extends Command
          * Send the global event to register other package permissions
          */
         $this->info('Registering Permissions');
-        $results = event(RegisterPermissionEvent::class, [], false);
-        $this->registerPermissions($results);
+        event(RegisterPermissionEvent::class, [], false);
+
+        foreach (RegisterPermission::permissions() as $permission) {
+                $this->info('Registering Package Permission: ' . $permission->name());
+                $this->permissionsToSync[] = $permission->toArray();
+        }
+
+        foreach (RegisterPermission::policies() as $policy) {
+            /** @var AbstractPolicy $policy */
+            $policy = new $policy;
+            $this->info('Registering Package Policies: ' . $policy->policyName());
+            $this->permissionsToSync = array_merge(
+                $this->permissionsToSync,
+                $policy->permissions()
+            );
+        }
+
 
         $this->seedPolicies();
         $this->seedPermissions();
@@ -127,36 +141,6 @@ class SyncPermissions extends Command
             $policy = new $policy;
             $this->info('Registering App Policies: ' . $policy->policyName());
             $this->permissionsToSync = array_merge($this->permissionsToSync, $policy->permissions());
-        }
-    }
-
-    private function registerPermissions(array $results): void
-    {
-        foreach (RegisterPermission::permissions() as $permission) {
-            $this->info('Registering Package Permission: ' . $permission->name());
-            $this->permissionsToSync[] = $permission->toArray();
-        }
-
-        foreach ($results as $permissions) {
-            foreach ($permissions as $permission) {
-                if (is_a($permission, RegisterPermission::class, true)) {
-                    continue;
-                }
-
-                if (!is_subclass_of($permission, AbstractPolicy::class)) {
-                    dd($permission);
-                    throw new TypeError(self::class . '::handle(): ' . RegisterPermissionEvent::class . ' return must be of type ' . AbstractPolicy::class . ', found ' . get_class($permission));
-                }
-
-                /** @var AbstractPolicy $policy */
-                $policy = new $permission;
-                $this->info('Registering Package Policies: ' . $policy->policyName());
-                $this->permissionsToSync = array_merge(
-                    $this->permissionsToSync,
-                    $policy->permissions()
-                );
-
-            }
         }
     }
 }

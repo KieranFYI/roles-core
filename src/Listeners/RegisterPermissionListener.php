@@ -10,9 +10,9 @@ class RegisterPermissionListener
     /**
      * Handle the event.
      *
-     * @return array
+     * @return void
      */
-    public function handle(): array
+    public function handle(): void
     {
         RegisterPermission::register(
             'Developer',
@@ -20,10 +20,5 @@ class RegisterPermissionListener
             100,
             'Ranks'
         );
-
-        return [
-            PermissionPolicy::class,
-            RolePolicy::class,
-        ];
     }
 }

@@ -2,12 +2,10 @@
 
 namespace KieranFYI\Roles\Core\Providers;
 
-use Exception;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncPermissions;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncRoles;
 use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
@@ -55,9 +53,6 @@ class RolesCorePackageServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         $router->aliasMiddleware('perm', HasPermission::class);
-
-        Gate::policy(Permission::class, PermissionPolicy::class);
-        Gate::policy(Role::class, RolePolicy::class);
 
         if ($this->app->runningInConsole()) {
             $this->commands([

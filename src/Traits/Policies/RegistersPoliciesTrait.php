@@ -2,7 +2,10 @@
 
 namespace KieranFYI\Roles\Core\Traits\Policies;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
+use KieranFYI\Roles\Core\Policies\AbstractPolicy;
+use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
 use TypeError;
 
 /**
@@ -18,6 +21,15 @@ trait RegistersPoliciesTrait
     public function registerPolicies()
     {
         foreach ($this->policies() as $model => $policy) {
+            if (!is_a($model, Model::class, true)) {
+                throw new TypeError(self::class . '::registerPolicies(): "' . $model . '" must be of type ' . Model::class);
+            }
+
+            if (!is_a($policy, AbstractPolicy::class, true)) {
+                throw new TypeError(self::class . '::registerPolicies(): ' . $model . ' policy must be of type ' . AbstractPolicy::class);
+            }
+
+            RegisterPermission::policy($policy);
             Gate::policy($model, $policy);
         }
     }

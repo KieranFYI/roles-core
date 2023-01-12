@@ -4,6 +4,7 @@ namespace KieranFYI\Roles\Core\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
+use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
 
 abstract class AbstractPolicy
 {
@@ -27,6 +28,11 @@ abstract class AbstractPolicy
         if (empty($this->policyName)) {
             throw new Exception('Invalid Class Name: ' . static::class);
         }
+    }
+
+    public static function register(): void
+    {
+        RegisterPermission::policy(static::class);
     }
 
     /**
@@ -60,7 +66,7 @@ abstract class AbstractPolicy
             [
                 '__construct', 'policyName', 'blacklist', 'permissions',
                 'allow', 'deny', 'denyWithStatus', 'denyAsNotFound',
-                'hasPermission'
+                'hasPermission', 'register', 'methods'
             ]
         );
 
