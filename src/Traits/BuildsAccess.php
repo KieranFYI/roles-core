@@ -60,7 +60,7 @@ trait BuildsAccess
     private static function type(): mixed {
         if (is_null(self::$type)) {
             $abilities = self::abilities();
-            if (empty($abilities)) {
+            if (empty($abilities) || !isset($abilities[request()->route()->getActionMethod()])) {
                 return self::$type = false;
             }
 
