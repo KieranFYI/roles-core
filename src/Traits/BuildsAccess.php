@@ -38,10 +38,10 @@ trait BuildsAccess
     private static function abilities(): array
     {
         if (is_null(self::$abilities)) {
-            $controller = request()->route()->controller;
-            if (is_null($controller)) {
+            if (is_null(request()->route()) || is_null(request()->route()->controller)) {
                 return self::$abilities = [];
             }
+            $controller = request()->route()->controller;
 
             if (!in_array(AuthorizesRequests::class, class_uses_recursive($controller))) {
                 return self::$abilities = [];
