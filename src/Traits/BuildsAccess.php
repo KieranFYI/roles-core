@@ -103,7 +103,7 @@ trait BuildsAccess
     /**
      * @var array
      */
-    private array $permissions = [];
+    private array $cachedAccess = [];
 
     /**
      * @return array
@@ -111,11 +111,11 @@ trait BuildsAccess
      */
     protected function getAccessAttribute(): array
     {
-        if (empty($this->permissions)) {
+        if (empty($this->cachedAccess)) {
             /** @var Model $this */
             $this->buildAccess($this);
         }
-        return $this->permissions;
+        return $this->cachedAccess;
     }
 
     /**
@@ -124,10 +124,10 @@ trait BuildsAccess
      */
     public function setAccessAttribute($value): void
     {
-        if (!empty($this->permissions)) {
+        if (!empty($this->cachedAccess)) {
             return;
         }
-        $this->permissions = $value;
+        $this->cachedAccess = $value;
     }
 
     /**
