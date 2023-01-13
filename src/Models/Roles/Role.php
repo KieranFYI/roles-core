@@ -5,6 +5,7 @@ namespace KieranFYI\Roles\Core\Models\Roles;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use KieranFYI\Logging\Traits\LoggingTrait;
+use KieranFYI\Roles\Core\Traits\BuildsAccess;
 use KieranFYI\Roles\Core\Traits\Permissions\ForcePermissionsTrait;
 use KieranFYI\Roles\Core\Traits\Permissions\HasPermissionsTrait;
 
@@ -20,6 +21,7 @@ class Role extends Model
     use HasPermissionsTrait;
     use ForcePermissionsTrait;
     use LoggingTrait;
+    use BuildsAccess;
 
     /**
      * The attributes that are mass assignable.
@@ -28,15 +30,6 @@ class Role extends Model
      */
     protected $fillable = [
         'name', 'display_order', 'colour', 'default'
-    ];
-
-    /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = [
-        'permissions'
     ];
 
     /**

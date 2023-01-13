@@ -39,7 +39,8 @@ trait HasPermissionsTrait
      */
     public function permissions(): MorphToMany
     {
-        return $this->morphToMany(Permission::class, 'model', 'permission_links');
+        return $this->morphToMany(Permission::class, 'model', 'permission_links')
+            ->withTimestamps();
     }
 
     /**
