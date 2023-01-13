@@ -5,11 +5,9 @@ namespace KieranFYI\Roles\Core\Traits;
 use Illuminate\Contracts\Routing\UrlRoutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Gate;
 use ReflectionException;
 use ReflectionMethod;
-use ReflectionObject;
 use ReflectionParameter;
 
 /**
@@ -41,6 +39,10 @@ trait BuildsAccess
     {
         if (is_null(self::$abilities)) {
             $controller = request()->route()->controller;
+            if (is_null($controller)) {
+                return self::$abilities = [];
+            }
+
             if (!in_array(AuthorizesRequests::class, class_uses_recursive($controller))) {
                 return self::$abilities = [];
             }
