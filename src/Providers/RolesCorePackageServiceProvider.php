@@ -101,10 +101,6 @@ class RolesCorePackageServiceProvider extends ServiceProvider
                 }
 
                 $options = ['last_modified' => $updatedAt];
-                if (!CacheableMiddleware::check($options)) {
-                    return;
-                }
-
                 $response->setCache($options);
             });
         }

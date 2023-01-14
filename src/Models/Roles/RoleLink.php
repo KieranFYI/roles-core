@@ -12,6 +12,11 @@ class RoleLink extends Model
     use LoggingTrait;
 
     /**
+     * @var string[]
+     */
+    protected $touches = ['model'];
+
+    /**
      * @return BelongsTo
      */
     public function role(): BelongsTo
