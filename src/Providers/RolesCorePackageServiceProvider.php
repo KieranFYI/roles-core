@@ -16,7 +16,9 @@ use KieranFYI\Roles\Core\Http\Middleware\HasPermission;
 use KieranFYI\Roles\Core\Listeners\RegisterPermissionListener;
 use KieranFYI\Roles\Core\Listeners\RegisterRoleListener;
 use KieranFYI\Roles\Core\Models\Permissions\Permission;
+use KieranFYI\Roles\Core\Models\Permissions\PermissionLink;
 use KieranFYI\Roles\Core\Models\Roles\Role;
+use KieranFYI\Roles\Core\Models\Roles\RoleLink;
 use KieranFYI\Roles\Core\Policies\Permissions\PermissionPolicy;
 use KieranFYI\Roles\Core\Policies\Roles\RolePolicy;
 use KieranFYI\Roles\Core\Traits\Policies\RegistersPoliciesTrait;
@@ -52,11 +54,14 @@ class RolesCorePackageServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($root . '/config/roles.php', 'roles');
         $this->mergeConfigFrom($root . '/config/permissions.php', 'permissions');
 
+        $this->registerServiceEndpoints();
+
         $this->loadMigrationsFrom($root . '/database/migrations');
 
         $this->registerPolicies();
 
         $router->aliasMiddleware('perm', HasPermission::class);
+
 
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -104,5 +109,34 @@ class RolesCorePackageServiceProvider extends ServiceProvider
                 $response->setCache($options);
             });
         }
+    }
+
+    private function registerServiceEndpoints()
+    {
+
+        $endpoints = config('service.endpoints');
+        if (!empty(config('permissions.endpoint'))) {
+            $endpoint = config('permissions.endpoint');
+            if (!isset($endpoints[$endpoint])) {
+                $endpoints[$endpoint] = [];
+            }
+            $endpoints[$endpoint] = array_merge($endpoints[$endpoint], [
+                Permission::class,
+                PermissionLink::class
+            ]);
+        }
+
+        if (!empty(config('roles.endpoint'))) {
+            $endpoint = config('roles.endpoint');
+            if (!isset($endpoints[$endpoint])) {
+                $endpoints[$endpoint] = [];
+            }
+            $endpoints[$endpoint] = array_merge($endpoints[$endpoint], [
+                Role::class,
+                RoleLink::class
+            ]);
+        }
+
+        config(['service.endpoints' => $endpoints]);
     }
 }

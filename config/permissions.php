@@ -7,5 +7,6 @@ return [
         'description' => '',
         'power' => 0,
         'group' => null,
-    ]
+    ],
+    'endpoint' => env('SERVICE_PERMISSIONS_ENDPOINT')
 ];

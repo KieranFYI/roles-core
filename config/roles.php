@@ -8,4 +8,5 @@ return [
         'colour' => '#8c8c8c',
         'default' => false
     ],
+    'endpoint' => env('SERVICE_ROLES_ENDPOINT')
 ];
