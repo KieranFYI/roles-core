@@ -3,11 +3,12 @@
 namespace KieranFYI\Roles\Core\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use KieranFYI\Logging\Traits\LoggingTrait;
 use KieranFYI\Roles\Core\Traits\BuildsAccess;
 use KieranFYI\Roles\Core\Traits\Permissions\ForcePermissionsTrait;
 use KieranFYI\Roles\Core\Traits\Permissions\HasPermissionsTrait;
+use KieranFYI\Services\Core\Eloquent\Builder;
+use KieranFYI\Services\Core\Traits\Serviceable;
 
 /**
  * @property integer $id
@@ -22,6 +23,7 @@ class Role extends Model
     use ForcePermissionsTrait;
     use LoggingTrait;
     use BuildsAccess;
+    use Serviceable;
 
     /**
      * The attributes that are mass assignable.
