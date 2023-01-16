@@ -68,7 +68,6 @@ trait BuildsAccess
 
             $controller = request()->route()->controller;
             $action = $abilities[request()->route()->getActionMethod()];
-            $params = collect(request()->route()->signatureParameters(UrlRoutable::class));
             $middleware = collect($controller->getMiddleware())
                 ->pluck('middleware')
                 ->firstWhere(function (string $middleware) use ($action) {
@@ -76,14 +75,12 @@ trait BuildsAccess
                 });
             $param = substr($middleware, strrpos($middleware, ',') + 1);
 
-            $type = $params->mapWithKeys(function (ReflectionParameter $value, $key) use ($param) {
-                if ($value->getName() !== $param) {
-                    return null;
-                }
+            $params = collect(request()->route()->signatureParameters(UrlRoutable::class))
+            ->mapWithKeys(function (ReflectionParameter $value, $key) use ($param) {
                return [$value->getName() => $value->getType()->getName()];
-            })->get($param);
+            });
 
-            self::$type = $type ?? $param;
+            self::$type = $params->get($param) ?? $param;
         }
 
         return self::$type;
