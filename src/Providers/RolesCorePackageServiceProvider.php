@@ -49,7 +49,7 @@ class RolesCorePackageServiceProvider extends ServiceProvider
         $this->publishes([
             $root . '/config/roles.php' => config_path('roles.php'),
             $root . '/config/permissions.php' => config_path('permissions.php')
-        ], ['roles', 'roles-config']);
+        ], ['roles', 'roles-config', 'config']);
 
         $this->mergeConfigFrom($root . '/config/roles.php', 'roles');
         $this->mergeConfigFrom($root . '/config/permissions.php', 'permissions');
@@ -111,7 +111,10 @@ class RolesCorePackageServiceProvider extends ServiceProvider
         }
     }
 
-    private function registerServiceEndpoints()
+    /**
+     * @return void
+     */
+    private function registerServiceEndpoints(): void
     {
 
         $endpoints = config('service.endpoints');
