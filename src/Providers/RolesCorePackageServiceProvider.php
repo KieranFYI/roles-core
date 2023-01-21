@@ -62,7 +62,6 @@ class RolesCorePackageServiceProvider extends ServiceProvider
 
         $router->aliasMiddleware('perm', HasPermission::class);
 
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 SyncPermissions::class,
