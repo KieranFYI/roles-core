@@ -23,7 +23,8 @@
     "require": {
         "php": "^8.1",
         "laravel/framework": "^9.19",
-        "kieranfyi/logging": "^0.3.8",
-        "kieranfyi/services-core": "^0.0.3"
+        "kieranfyi/logging": "^0.3.10",
+        "kieranfyi/services-core": "^0.0.3",
+        "kieranfyi/misc": "^0.3.11"
     }
 }

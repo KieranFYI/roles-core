@@ -4,6 +4,7 @@ namespace KieranFYI\Roles\Core\Models\Roles;
 
 use Illuminate\Database\Eloquent\Model;
 use KieranFYI\Logging\Traits\LoggingTrait;
+use KieranFYI\Misc\Traits\KeyedTitle;
 use KieranFYI\Roles\Core\Traits\BuildsAccess;
 use KieranFYI\Roles\Core\Traits\Permissions\ForcePermissionsTrait;
 use KieranFYI\Roles\Core\Traits\Permissions\HasPermissionsTrait;
@@ -24,6 +25,7 @@ class Role extends Model
     use LoggingTrait;
     use BuildsAccess;
     use Serviceable;
+    use KeyedTitle;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +42,11 @@ class Role extends Model
     protected $casts = [
         'default' => 'boolean'
     ];
+
+    /**
+     * @var string
+     */
+    public string $title = 'name';
 
     /**
      * @return string
