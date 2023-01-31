@@ -41,5 +41,5 @@ class Permission extends Model
     /**
      * @var string
      */
-    public string $title = 'name';
+    public string $title_key = 'name';
 }
