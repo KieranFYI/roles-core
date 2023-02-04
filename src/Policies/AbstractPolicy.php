@@ -2,6 +2,7 @@
 
 namespace KieranFYI\Roles\Core\Policies;
 
+use Exception;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Database\Eloquent\Model;
 use KieranFYI\Roles\Core\Services\Register\RegisterPermission;
@@ -20,9 +21,15 @@ abstract class AbstractPolicy
      */
     protected array $blacklist = [];
 
+    /**
+     * @throws Exception
+     */
     public function __construct()
     {
-        $name = str_replace('Policy', '', substr(strrchr(static::class, '\\'), 1));
+        $name = substr(strrchr(static::class, '\\'), 1);
+        if ($name !== 'Policy') {
+            $name = str_replace('Policy', '', $name);
+        }
         $this->policyName = trim(ucwords(implode(' ', preg_split('/(?=[A-Z])/', $name))));
 
         if (empty($this->policyName)) {
@@ -94,12 +101,13 @@ abstract class AbstractPolicy
     }
 
     /**
+     * @param mixed $user
      * @param string $prefix
      * @return bool
      */
     protected function hasPermission(mixed $user, string $prefix): bool
     {
-        if (method_exists($user, 'hasPermission')) {
+        if (!is_null($user) && method_exists($user, 'hasPermission')) {
             return $user->hasPermission($prefix . ' ' . $this->policyName());
         }
         return false;

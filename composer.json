@@ -7,6 +7,11 @@
             "KieranFYI\\Roles\\Core\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "KieranFYI\\Tests\\Roles\\Core\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Kieran",
@@ -23,8 +28,12 @@
     "require": {
         "php": "^8.1",
         "laravel/framework": "^9.19",
-        "kieranfyi/logging": "^0.3.12",
-        "kieranfyi/services-core": "^0.0.4",
-        "kieranfyi/misc": "^0.3.14"
+        "kieranfyi/logging": "^0.3",
+        "kieranfyi/services-core": "^0.0",
+        "kieranfyi/misc": "^0.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5",
+        "orchestra/testbench": "^7.21"
     }
 }
