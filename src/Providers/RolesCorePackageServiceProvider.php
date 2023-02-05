@@ -7,7 +7,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use KieranFYI\Misc\Http\Middleware\CacheableMiddleware;
+use KieranFYI\Misc\Facades\Cacheable;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncPermissions;
 use KieranFYI\Roles\Core\Console\Commands\Sync\SyncRoles;
 use KieranFYI\Roles\Core\Events\Register\RegisterPermissionEvent;
@@ -16,9 +16,7 @@ use KieranFYI\Roles\Core\Http\Middleware\HasPermission;
 use KieranFYI\Roles\Core\Listeners\RegisterPermissionListener;
 use KieranFYI\Roles\Core\Listeners\RegisterRoleListener;
 use KieranFYI\Roles\Core\Models\Permissions\Permission;
-use KieranFYI\Roles\Core\Models\Permissions\PermissionLink;
 use KieranFYI\Roles\Core\Models\Roles\Role;
-use KieranFYI\Roles\Core\Models\Roles\RoleLink;
 use KieranFYI\Roles\Core\Policies\Permissions\PermissionPolicy;
 use KieranFYI\Roles\Core\Policies\Roles\RolePolicy;
 use KieranFYI\Roles\Core\Traits\Policies\RegistersPoliciesTrait;
@@ -54,8 +52,6 @@ class RolesCorePackageServiceProvider extends ServiceProvider
         $this->mergeConfigFrom($root . '/config/roles.php', 'roles');
         $this->mergeConfigFrom($root . '/config/permissions.php', 'permissions');
 
-        $this->registerServiceEndpoints();
-
         $this->loadMigrationsFrom($root . '/database/migrations');
 
         $this->registerPolicies();
@@ -71,7 +67,7 @@ class RolesCorePackageServiceProvider extends ServiceProvider
             Event::listen(RegisterPermissionEvent::class, RegisterPermissionListener::class);
             Event::listen(RegisterRoleEvent::class, RegisterRoleListener::class);
         } else {
-            CacheableMiddleware::checking(function (Response $response) {
+            Cacheable::checking(function (Response $response) {
                 $user = Auth::user();
                 if (!is_a($user, Model::class, true) && !in_array(HasRolesTrait::class, class_uses_recursive($user))) {
                     return;
@@ -108,37 +104,5 @@ class RolesCorePackageServiceProvider extends ServiceProvider
                 $response->setCache($options);
             });
         }
-    }
-
-    /**
-     * @return void
-     */
-    private function registerServiceEndpoints(): void
-    {
-
-        $endpoints = config('service.endpoints');
-        if (!empty(config('permissions.endpoint'))) {
-            $endpoint = config('permissions.endpoint');
-            if (!isset($endpoints[$endpoint])) {
-                $endpoints[$endpoint] = [];
-            }
-            $endpoints[$endpoint] = array_merge($endpoints[$endpoint], [
-                Permission::class,
-                PermissionLink::class
-            ]);
-        }
-
-        if (!empty(config('roles.endpoint'))) {
-            $endpoint = config('roles.endpoint');
-            if (!isset($endpoints[$endpoint])) {
-                $endpoints[$endpoint] = [];
-            }
-            $endpoints[$endpoint] = array_merge($endpoints[$endpoint], [
-                Role::class,
-                RoleLink::class
-            ]);
-        }
-
-        config(['service.endpoints' => $endpoints]);
     }
 }
